@@ -31,7 +31,7 @@ object Store_Finder_DataOne {
                 val diff = SubsetListRow diff cartBuy
                 costArray(i) = costSet / diff.size}
             else
-                costArray(i) = 999.00
+                costArray(i) = Double.MaxValue
                 println("SubsetListRow:"+SubsetListRow)
             }
         println("cartBuy:"+cartBuy) 
