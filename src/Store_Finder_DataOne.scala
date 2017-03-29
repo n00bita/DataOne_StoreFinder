@@ -57,7 +57,7 @@ object Store_Finder_DataOne {
   def globalMinimum(feasibleShops : Array[Int],concernedData: RDD[Products],prodBuySet
                     :scala.collection.mutable.Set[String]):scala.collection.mutable.Map[Int, Double]={
     val minLocalMap = collection.mutable.Map[Int, Double]()
-    for(STORE<- feasibleShops){//Gro
+    for(STORE<- feasibleShops){//Group Rows By storeID and call cost() of them
         val priceList = concernedData.filter(x=>x.STORE_ID==STORE).map(x => x.PRODUCT_PRICE).collect
         val SubsetList = concernedData.filter(x=>x.STORE_ID==STORE)
            .map(x => ((for (item <- x.PRODUCT_LIST split ",") yield item.trim).toSet)).collect
