@@ -22,17 +22,17 @@ object Store_Finder_DataOne {
     var costArray = new Array[Double](priceList.length)
     var totalCost=0.0
     println("=====================Entered CartBuy===========================")
-    while (!(prodBuySet subsetOf cartBuy)) {
+    while (!(prodBuySet subsetOf cartBuy)) { //Our cart needs to have all products in our productList(+ extra items maybe.)
         var index = 0
         for (i <- 0 to SubsetList.length -1) {
             val costSet = priceList(i)
             val SubsetListRow = SubsetList(i)
-            if (!(SubsetListRow subsetOf cartBuy)) {
+            if (!(SubsetListRow subsetOf cartBuy)) { //Is this a new product, that is already not in cart. ?
                 val diff = SubsetListRow diff cartBuy
-                costArray(i) = costSet / diff.size}
+                costArray(i) = costSet / diff.size}// our cost function which me minimise
             else
                 costArray(i) = Double.MaxValue
-                println("SubsetListRow:"+SubsetListRow)
+                println("SubsetListRow:"+SubsetListRow)//product already in cart so arbiitary high Cost.
             }
         println("cartBuy:"+cartBuy) 
         costArray.foreach(x=>print(x+" "))
@@ -40,8 +40,8 @@ object Store_Finder_DataOne {
         val minimum = costArray.min
         while (costArray(index) != minimum) 
             index +=1
-        val bestSet = SubsetList(index)
-        cartBuy = cartBuy union bestSet
+        val bestSet = SubsetList(index)//Find the row which need to include
+        cartBuy = cartBuy union bestSet //Add element to our Cart
         val addPrice =priceList(index)
         totalCost+=addPrice
     }
@@ -57,14 +57,14 @@ object Store_Finder_DataOne {
   def globalMinimum(feasibleShops : Array[Int],concernedData: RDD[Products],prodBuySet
                     :scala.collection.mutable.Set[String]):scala.collection.mutable.Map[Int, Double]={
     val minLocalMap = collection.mutable.Map[Int, Double]()
-    for(STORE<- feasibleShops){
+    for(STORE<- feasibleShops){//Gro
         val priceList = concernedData.filter(x=>x.STORE_ID==STORE).map(x => x.PRODUCT_PRICE).collect
         val SubsetList = concernedData.filter(x=>x.STORE_ID==STORE)
            .map(x => ((for (item <- x.PRODUCT_LIST split ",") yield item.trim).toSet)).collect
     //Find minimum cost local to each Shop
-        minLocalMap += (STORE -> findStoreMinimum(SubsetList,priceList,prodBuySet))       
+        minLocalMap += (STORE -> findStoreMinimum(SubsetList,priceList,prodBuySet)) //actual Calculation
     }
-    //Find minimum cost globally
+    //Find minimum cost globally using a min() on the map.
     minLocalMap
     }
   
@@ -85,7 +85,7 @@ object Store_Finder_DataOne {
     for (i <- 1 to args.length - 1) {
       prodBuySet += args(i)
     }
-    
+ //Find all those ShopID's which have all the products we require
     val feasibleShops = productRDD
        .flatMap(row => for (item <- row.PRODUCT_LIST split ",") yield (row.STORE_ID, item))
        .groupByKey()
@@ -93,11 +93,11 @@ object Store_Finder_DataOne {
        .filter(prodBuySet subsetOf _._2).map(_._1).collect
        
 //Use Spark to filter if he have massive amount of Data.
-    val concernedData = productRDD.filter(x => feasibleShops contains x.STORE_ID)
+    val concernedData = productRDD.filter(x => feasibleShops contains x.STORE_ID)//Shop has all products
        .filter { x => ((for (item <- x.PRODUCT_LIST split ",") yield item.trim)
-           .toSet intersect prodBuySet isEmpty) == false }
+           .toSet intersect prodBuySet isEmpty) == false }//Row has atleast one relevant product. 
     
-    val minLocalMap=globalMinimum(feasibleShops,concernedData,prodBuySet)
+    val minLocalMap=globalMinimum(feasibleShops,concernedData,prodBuySet)//Pass all filtered Shops Data
     println("Minimum Price : "+minLocalMap.max._2+", Store Id : "+minLocalMap.max._1)
 
 //Using DataFrames to manipulate our Data
