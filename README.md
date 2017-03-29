@@ -14,7 +14,7 @@ b.Filter again to those which contain at least one relevant product.
 5.Call LocalMinimum() for each ShopID(multiple rows of same Shop)
 6.Call GlobalMinimum() after finding all the local minimum.
 
-ToDO
+ToDO:
 1.Build a wrapper .sh to use spark-submit to get input in specified format.
 
 2.Use Maven/sbt to Build the Project
