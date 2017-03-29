@@ -15,6 +15,14 @@ The basic logic as follows:
     5.Call LocalMinimum() for each ShopID(multiple rows of same Shop)
     6.Call GlobalMinimum() after finding all the local minimum.
 
+
+ToDO:
+
+    1.Build a wrapper .sh to use spark-submit to get input in specified format.
+    2.Use Maven/sbt to Build the Project
+     Env: Java 8 | Scala 2.11 | Spark 2.0.2
+
+
 LocalMinimum():
 
 1) Let I represents set of elements included so far.  Initialize I = {}
@@ -26,11 +34,5 @@ LocalMinimum():
       Cost(Si) / |Si - I|
       
     b) Add elements of above picked Si to I, i.e.,  I = I U Si
-
-ToDO:
-
-    1.Build a wrapper .sh to use spark-submit to get input in specified format.
-    2.Use Maven/sbt to Build the Project
-     Env: Java 8 | Scala 2.11 | Spark 2.0.2
 
 
