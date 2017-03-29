@@ -8,8 +8,8 @@ The basic logic as follows:
 
     1.Read the data as text File and split it by the delimiter "," to make a RDD.
     2.Read the CLI arguments to make a Set of it.(Products to be bought.)
-    3.Find all the Shops which have all the Products required by us and save it to an array.
-    4.Filter to those :
+    3.Find all the ShopID(only) which have all the Products required by us and save it to an array.
+    4.Filter to the Rows:
         a. Those shops which have all the products.
         b.Filter again to those which contain at least one relevant product.
     5.Call LocalMinimum() for each ShopID(multiple rows of same Shop)
