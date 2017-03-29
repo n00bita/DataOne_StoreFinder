@@ -35,4 +35,4 @@ LocalMinimum():
       
     b) Add elements of above picked Si to I, i.e.,  I = I U Si
 
-
+   Source:http://math.mit.edu/~goemans/18434S06/setcover-tamara.pdf
